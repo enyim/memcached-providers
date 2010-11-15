@@ -11,7 +11,10 @@ namespace TestSite
 	{
 		protected void Page_Load(object sender, EventArgs e)
 		{
+			var a = Session["A"];
+			var b = (a == null) ? 1 : (int)a;
 
+			Session["A"] = b + 1;
 		}
 	}
 }
