@@ -14,49 +14,13 @@ namespace Enyim.Caching.Web
 		{
 			base.Initialize(name, config);
 
-			var factory = this.GetFactoryInstance(GetAndRemove(config, "factory", false));
-			System.Diagnostics.Debug.Assert(factory != null, "factory == null");
+			this.client = ProviderHelper.GetClient(name, config, () => (IMemcachedClientFactory)new DefaultClientFactory());
 
-			this.client = factory.Create(name, config);
-
-			CheckForUnknownAttributes(config);
-		}
-
-		private IMemcachedClientFactory GetFactoryInstance(string typeName)
-		{
-			if (String.IsNullOrEmpty(typeName))
-				return new DefaultClientFactory();
-
-			var type = Type.GetType(typeName, false);
-			if (type == null)
-				throw new System.Configuration.ConfigurationErrorsException("Could not load type: " + typeName);
-
-			if (!typeof(IMemcachedClientFactory).IsAssignableFrom(type))
-				throw new System.Configuration.ConfigurationErrorsException("Type '" + typeName + "' must implement IMemcachedClientFactory");
-
-			return FastActivator.Create(type) as IMemcachedClientFactory;
-		}
-
-		public static string GetAndRemove(NameValueCollection nvc, string name, bool required)
-		{
-			var tmp = nvc[name];
-			if (tmp == null)
-			{
-				if (required) throw new System.Configuration.ConfigurationErrorsException("Missing parameter: " + name);
-			}
-			else
-				nvc.Remove(name);
-
-			return tmp;
-		}
-
-		public static void CheckForUnknownAttributes(NameValueCollection nvc)
-		{
-			if (nvc.Count > 0)
-				throw new System.Configuration.ConfigurationErrorsException("Unknown parameter: " + nvc.Keys[0]);
+			ProviderHelper.CheckForUnknownAttributes(config);
 		}
 
 		#region [ OutputCacheProvider          ]
+
 		public override object Add(string key, object entry, DateTime utcExpiry)
 		{
 			// make sure that the expiration date is flagges as utc.
@@ -95,6 +59,7 @@ namespace Enyim.Caching.Web
 
 			this.client.Store(StoreMode.Set, key, entry, utcExpiry);
 		}
+
 		#endregion
 	}
 }

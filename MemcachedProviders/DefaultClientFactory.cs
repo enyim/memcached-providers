@@ -7,8 +7,7 @@ namespace Enyim.Caching.Web
 	{
 		IMemcachedClient IMemcachedClientFactory.Create(string name, NameValueCollection config)
 		{
-			var section = MemcachedOutputCacheProvider.GetAndRemove(config, "section", false);
-			MemcachedOutputCacheProvider.CheckForUnknownAttributes(config);
+			var section = ProviderHelper.GetAndRemove(config, "section", false);
 
 			return String.IsNullOrEmpty(section) ? new MemcachedClient() : new MemcachedClient(section);
 		}

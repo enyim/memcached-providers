@@ -7,10 +7,9 @@ namespace Enyim.Caching.Web
 	{
 		IMemcachedClient IMemcachedClientFactory.Create(string name, NameValueCollection config)
 		{
-			var section = MemcachedOutputCacheProvider.GetAndRemove(config, "section", false);
-			MemcachedOutputCacheProvider.CheckForUnknownAttributes(config);
+			var section = ProviderHelper.GetAndRemove(config, "section", false);
 
-			return new NorthScale.Store.NorthScaleClient(section);
+			return new Membase.MembaseClient(section);
 		}
 	}
 }

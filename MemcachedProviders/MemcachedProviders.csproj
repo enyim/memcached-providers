@@ -47,15 +47,17 @@
     <Compile Include="DefaultClientFactory.cs" />
     <Compile Include="MembaseClientFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ProviderHelper.cs" />
+    <Compile Include="MembaseSessionStateProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\lib\EnyimMemcached\Enyim.Caching\Enyim.Caching.csproj">
       <Project>{D438C0B3-A168-40B8-BDDD-61F0939DFF35}</Project>
       <Name>Enyim.Caching</Name>
     </ProjectReference>
-    <ProjectReference Include="..\lib\EnyimMemcached\Northscale.Store\Northscale.Store.csproj">
+    <ProjectReference Include="..\lib\EnyimMemcached\Membase\Membase.csproj">
       <Project>{708A2350-A26C-444D-B975-8164263951A7}</Project>
-      <Name>Northscale.Store</Name>
+      <Name>Membase</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
