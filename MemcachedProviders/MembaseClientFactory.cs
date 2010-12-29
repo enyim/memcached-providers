@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Specialized;
+using System.Configuration;
+using Membase.Configuration;
 
 namespace Enyim.Caching.Web
 {
@@ -7,7 +9,12 @@ namespace Enyim.Caching.Web
 	{
 		IMemcachedClient IMemcachedClientFactory.Create(string name, NameValueCollection config)
 		{
-			var section = ProviderHelper.GetAndRemove(config, "section", false);
+			var sectionName = ProviderHelper.GetAndRemove(config, "section", false);
+			if (String.IsNullOrEmpty(sectionName))
+				return new Membase.MembaseClient();
+
+			var section = ConfigurationManager.GetSection(sectionName) as IMembaseClientConfiguration;
+			if (section == null) throw new InvalidOperationException("Invalid config section: " + section);
 
 			return new Membase.MembaseClient(section);
 		}
