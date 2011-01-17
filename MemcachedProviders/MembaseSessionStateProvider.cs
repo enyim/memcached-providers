@@ -75,7 +75,6 @@ namespace Enyim.Caching.Web
 			actions = SessionStateActions.None;
 
 			var e = SessionStateItem.Load(this.client, id, false);
-
 			if (e == null) return null;
 
 			if (acquireLock)
@@ -105,6 +104,7 @@ namespace Enyim.Caching.Web
 
 					// it has been modifed between we loaded and tried to save it
 					e = SessionStateItem.Load(this.client, id, false);
+					if (e == null) return null;
 				}
 			}
 
